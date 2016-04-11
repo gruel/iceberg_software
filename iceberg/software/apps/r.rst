@@ -11,7 +11,7 @@ R is a statistical computing language.
 
 Interactive Usage
 -----------------
-After connecting to iceberg (see :ref:`ssh`),  start an interactive session with the :code:`qsh` command.
+After connecting to iceberg (see :ref:`ssh`),  start an interactive session with the :code:`qrshx` command.
 
 The latest version of R can be loaded with ::
 
@@ -19,6 +19,7 @@ The latest version of R can be loaded with ::
 
 Alternatively, you can load a specific version of R using one of the following ::
 
+        module load apps/R/3.2.4
         module load apps/R/3.2.3
         module load apps/R/3.2.2
         module load apps/R/3.2.1
@@ -31,7 +32,7 @@ R can then be run with ::
 
 Serial (one CPU) Batch usage
 ----------------------------
-Here, we assume that you wish to run the program :code:`my_code.R` on the system. With batch usage it is recommended to load a specific version of R, for example :code:`module load apps/R/3.2.3`, to ensure the expected output is achieved.
+Here, we assume that you wish to run the program :code:`my_code.R` on the system. With batch usage it is recommended to load a specific version of R, for example :code:`module load apps/R/3.2.4`, to ensure the expected output is achieved.
 
 First, you need to write a batch submission file. We assume you'll call this :code:`my_job.sge` ::
 
@@ -39,7 +40,7 @@ First, you need to write a batch submission file. We assume you'll call this :co
   #$ -S /bin/bash
   #$ -cwd                      # Run job from current directory
 
-  module load apps/R/3.2.3     # Recommended to load a specific version of R
+  module load apps/R/3.2.4     # Recommended to load a specific version of R
 
   R CMD BATCH my_code.R my_code.R.o$JOB_ID
 
@@ -81,7 +82,7 @@ To check your packages are up to date, and update them if necessary, run the fol
 
         update.packages(lib.loc = "~/R/x86_64-unknown-linux-gnu-library/3.2/")
 
-The folder name after :code:`~/R/` will likely change, but this can be completed with tab autocompletion from the R session. Ensure :code:`lib.loc` folder is specified, or R will attempt to update the wrong library.
+The folder name after :code:`~/R/` will likely change, but this can be completed with tab autocompletion from the R session. Ensure `lib.loc` folder is specified, or R will attempt to update the wrong library.
 
 R Packages that require external libraries
 ------------------------------------------
@@ -125,6 +126,18 @@ For full details about the functions made available by the Rmath library, see se
 Installation Notes
 ------------------
 These notes are primarily for administrators of the system.
+
+**Version 3.2.4**
+
+* `What's new in R version 3.2.4 <https://cran.r-project.org/bin/windows/base/NEWS.R-3.2.4.html>`_
+
+This was a scripted install. It was compiled from source with gcc 4.4.7 and with `--enable-R-shlib` enabled. You will need a large memory `qrshx` session in order to successfully run the build script. I used `qrshx -l rmem=8G -l mem=8G`
+
+This build made use of new versions of :ref:`xzutils` and :ref:`curl`
+
+* `install_R_3.2.4.sh <https://github.com/rcgsheffield/iceberg_software/blob/master/software/install_scripts/apps/R/install_R_3.2.4.sh>`_ Downloads, compiles, tests and installs R 3.2.4 and the ``Rmath`` library.
+* `R 3.2.4 Modulefile <https://github.com/rcgsheffield/iceberg_software/blob/master/software/modulefiles/apps/R/3.2.4>`_ located on the system at ``/usr/local/modulefiles/apps/R/3.2.4``
+* Install log-files, including the output of the `make check` tests are available on the system at `/usr/local/packages6/R/3.2.4/install_logs`
 
 **Version 3.2.3**
 
